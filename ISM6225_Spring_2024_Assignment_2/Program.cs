@@ -6,6 +6,7 @@ WRITE YOUR CODE IN THE RESPECTIVE QUESTION FUNCTION BLOCK
 
 */
 
+using System.Net.Sockets;
 using System.Text;
 
 namespace ISM6225_Spring_2024_Assignment_2
@@ -390,8 +391,43 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
-                
-                return 0;
+                if (nums.Length < 2)
+                {
+                    return 0;
+                }
+
+                int minVal = nums[0], maxVal = nums[0];
+                for (int i = 1; i < nums.Length; i++)
+                {
+                    minVal = Math.Min(minVal, nums[i]);
+                    maxVal = Math.Max(maxVal, nums[i]);
+                }
+
+                int bucketSize = Math.Max(1, (maxVal - minVal) / (nums.Length - 1));
+                int numBuckets = (maxVal - minVal) / bucketSize + 1;
+
+                int[] minInBucket = new int[numBuckets];
+                int[] maxInBucket = new int[numBuckets];
+                Array.Fill(minInBucket, int.MaxValue);
+                Array.Fill(maxInBucket, int.MinValue);
+
+                for (int i = 0; i < nums.Length; i++)
+                {
+                    int bucketIndex = (nums[i] - minVal) / bucketSize;
+                    minInBucket[bucketIndex] = Math.Min(minInBucket[bucketIndex], nums[i]);
+                    maxInBucket[bucketIndex] = Math.Max(maxInBucket[bucketIndex], nums[i]);
+                }
+
+                int maxGap = 0, prevMax = minVal;
+                for (int i = 0; i < numBuckets; i++)
+                {
+                    if (minInBucket[i] == int.MaxValue) continue; // Skip empty buckets 
+
+                    maxGap = Math.Max(maxGap, minInBucket[i] - prevMax);
+                    prevMax = maxInBucket[i];
+                }
+
+                return maxGap;
             }
             catch (Exception)
             {
