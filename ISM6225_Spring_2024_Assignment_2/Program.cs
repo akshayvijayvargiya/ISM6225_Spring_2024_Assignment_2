@@ -102,20 +102,27 @@ namespace ISM6225_Spring_2024_Assignment_2
             {
                 // Write your code here and you can modify the return value according to the requirements
                 int len = nums.Length;
-                if (len == 0 || len == 1)
+                // First, we check the length of the 'nums' array.
+                if (len == 0 || len == 1) //lets check whether the length of nums array is 0 or 1, we can simply return the length.
                 {
                     return len;
                 }
                 int temp = 1;
+                // pointer to keep track of the position where the next unique
                 for (int i = 1;i<len;i++)
                 {
+                    //We iterate through the 'nums' array starting from the second element (index 1).
+
+                    // If the current element is different from the previous element,
+                    // we copy it to the 'temp' position and increment 'temp'.
                     if (nums[i] != nums[i - 1])
                     {
                         nums[temp] = nums[i];
                         temp++;
                     }
                 }
-
+                // Finally, we return the 'temp' value, which represents the length of the
+                // modified array with unique elements.
                 return temp;
 
             }
@@ -151,21 +158,30 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
+                // Get the length of the input array 'nums'
                 int len = nums.Length;
+
+                // If the array is empty, return the original array
                 if (len == 0)
                     return nums;
+
+                // Use 'count' variable to keep track of the position for the next non-zero element
                 int count = 0;
                 for (int i = 0; i<len; i++)
                 {
+                    // If the current element is non-zero
                     if (nums[i] != 0)
                     {
+                        // Swap the current element with the element at the 'count' position
                         int temp = nums[i];
                         nums[i] = nums[count];
                         nums[count] = temp;
 
+                        // Increment the 'count' variable
                         count++;
                     }
                 }
+                // Return the modified array
                 return nums;
             }
             catch (Exception)
@@ -216,27 +232,40 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
+                // Initialize a list to store the triplets that sum up to 0
                 List<IList<int>> result = new List<IList<int>>();
+
+                // If the input array 'nums' has less than 3 elements, return an empty result
                 if (nums.Length < 3)
                 {
                     return result;
                 }
+                
+                // Sort the input array 'nums' in ascending order
                 Array.Sort(nums);
                 for (int i = 0; i < nums.Length - 2; i++)
                 {
+                    // If the current element is positive, we can stop the loop
+                    // as the remaining elements will also be positive
                     if (nums[i] > 0)
                         break;
 
+                    // Skip the current element if it's a duplicate of the previous one
+                    // to avoid generating duplicate triplets
                     if (i > 0 && nums[i] == nums[i - 1])
                         continue;
 
+                    // Initialize two pointers, 'left' and 'right', to the elements after the current element
                     int left = i + 1;
                     int right = nums.Length - 1;
 
+                    // Use the two-pointer approach to find triplets that sum up to 0
                     while (left < right)
                     {
                         int sum = nums[i] + nums[left] + nums[right];
 
+                        // If the sum is 0, add the triplet to the result list
+                        // and move the pointers to skip any duplicate elements
                         if (sum == 0)
                         {
                             result.Add(new List<int>() { nums[i], nums[left], nums[right] });
@@ -245,12 +274,15 @@ namespace ISM6225_Spring_2024_Assignment_2
                             left++;
                             right--;
                         }
+                        // If the sum is less than 0, increment the 'left' pointer
                         else if (sum < 0)
                             left++;
+                        // If the sum is greater than 0, decrement the 'right' pointer
                         else
                             right--;
                     }
                 }
+                // Return the list of triplets that sum up to 0
                 return result;
             }
             catch (Exception)
@@ -285,27 +317,38 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
+                // Check if the input array 'nums' is null or empty
                 if (nums == null || nums.Length == 0)
                     return 0;
 
+                // Initialize variables to keep track of the count and the current streak
                 int count = 0;
                 int temp = 0;
 
+                // Iterate through the input array 'nums'
                 foreach (int num in nums)
                 {
+                    // If the current element is 1
                     if (num == 1)
                     {
+                        // Increment the current temp
                         temp++;
                     }
                     else
                     {
+                        // If the current streak(of consecutive one) is greater than the maximum count, update the count
                         if (temp > count)
                             count = temp;
+                        // Reset the current streak to 0
                         temp = 0;
                     }
                 }
+                // Check if the final streak is greater than the maximum count, and update the count if necessary
+                //trailing ones if there are
                 if (temp > count)
                     count = temp;
+
+                // Return the maximum count of consecutive 1's
                 return count;
             }
             catch (Exception)
@@ -341,16 +384,30 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
+                // If the input 'binary' is 0, return 0 as the decimal value
                 if (binary == 0)
                     return 0;
+
+                // Initialize the decimal value to 0
                 int decimalValue = 0;
+
+                // Initialize the power variable to 1 (representing 2^0)
                 int power = 1;  // Represents 2^0
+
+                // Iterate until the 'binary' value becomes 0
                 while (binary > 0)
                 {
+                    // Get the last digit of the 'binary' number
                     int lastDigit = binary % 10;
+
+                    // Add the contribution of the last digit to the decimal value
+                    // (last digit * 2^current_power)
                     decimalValue += lastDigit * power;
 
+                    // Update the power by multiplying it by 2 (to get the next power of 2)
                     power *= 2;
+
+                    // Remove the last digit from the 'binary' number
                     binary /= 10;
                 }
 
@@ -391,26 +448,32 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
+                // Return 0 if array has less than 2 elements (no gap possible)
                 if (nums.Length < 2)
                 {
                     return 0;
                 }
 
+                // Initialize minimum and maximum values with the first element
                 int minVal = nums[0], maxVal = nums[0];
+                // Find global minimum and maximum values in the array
                 for (int i = 1; i < nums.Length; i++)
                 {
                     minVal = Math.Min(minVal, nums[i]);
                     maxVal = Math.Max(maxVal, nums[i]);
                 }
 
+                // Calculate optimal bucket size and number of buckets needed
                 int bucketSize = Math.Max(1, (maxVal - minVal) / (nums.Length - 1));
                 int numBuckets = (maxVal - minVal) / bucketSize + 1;
 
+                // Initialize arrays to track minimum and maximum in each bucket
                 int[] minInBucket = new int[numBuckets];
                 int[] maxInBucket = new int[numBuckets];
                 Array.Fill(minInBucket, int.MaxValue);
                 Array.Fill(maxInBucket, int.MinValue);
 
+                // Distribute numbers into buckets and update bucket min/max
                 for (int i = 0; i < nums.Length; i++)
                 {
                     int bucketIndex = (nums[i] - minVal) / bucketSize;
@@ -418,15 +481,18 @@ namespace ISM6225_Spring_2024_Assignment_2
                     maxInBucket[bucketIndex] = Math.Max(maxInBucket[bucketIndex], nums[i]);
                 }
 
+                // Compute maximum gap by iterating through buckets
                 int maxGap = 0, prevMax = minVal;
                 for (int i = 0; i < numBuckets; i++)
                 {
-                    if (minInBucket[i] == int.MaxValue) continue; // Skip empty buckets 
+                    if (minInBucket[i] == int.MaxValue) continue; // Skip empty buckets
 
+                    // Update maxGap based on the current and previous buckets
                     maxGap = Math.Max(maxGap, minInBucket[i] - prevMax);
                     prevMax = maxInBucket[i];
                 }
 
+                // Return the maximum gap found
                 return maxGap;
             }
             catch (Exception)
@@ -467,20 +533,24 @@ namespace ISM6225_Spring_2024_Assignment_2
             try
             {
                 int len = nums.Length;
+                // Return 0 if array has less than 3 elements
                 if (len < 3)
                 {
                     return 0;
                 }
-                //sorting in descending order
+                // Sort array in descending order to simplify finding the triangular triplet
                 Array.Sort(nums, (a, b) => b - a);
-                for (int i=0; i<len-2; i++)
+                // Iterate to find a triplet forming a triangle
+                for (int i = 0; i < len - 2; i++)
                 {
+                    // Check if the triplet can form a triangle
                     if (nums[i] < nums[i + 1] + nums[i + 2])
                     {
+                        // Return the perimeter of the triangle
                         return nums[i] + nums[i + 1] + nums[i + 2];
                     }
                 }
-
+                // Return 0 if no such triplet is found
                 return 0;
             }
             catch (Exception)
@@ -534,19 +604,26 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
+                // Return the original string if it or the part is null
                 if (s == null || part == null)
                     return s;
+                // Return the original string if it or the part is empty
                 if (s == "" || part == "")
                     return s;
+                // Return the original string if it does not contain the part
                 if (!s.Contains(part))
                     return s;
 
+                // Loop as long as the string contains the part
                 while (s.Contains(part))
                 {
+                    // Find the starting index of the part in the string
                     int index = s.IndexOf(part);
+                    // Remove the part from the string
                     s = s.Remove(index, part.Length);
                 }
 
+                // Return the modified string after removing all occurrences of the part
                 return s;
             }
             catch (Exception)
